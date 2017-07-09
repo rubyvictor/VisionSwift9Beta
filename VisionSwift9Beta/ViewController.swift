@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Vision
 
 class ViewController: UIViewController {
 
@@ -23,9 +24,43 @@ class ViewController: UIViewController {
         imageView.backgroundColor = .blue
         
         view.addSubview(imageView)
+        
+        // request
+        let request = VNDetectFaceRectanglesRequest { (request, error) in
+            if let error = error {
+                print("Failed to detect faces", error)
+            }
+//            print(request)
+            
+            // results:
+            request.results?.forEach({ (result) in
+//                print(result)
+                
+                // Cast results as VNFaceObservation and call its functions
+                
+                guard let vnFaceObservation = result as? VNFaceObservation else { return }
+                
+                print(vnFaceObservation.boundingBox)
+                
+            })
+            
+            
+        }
+        // Handle the request
+        guard let cgImage = image.cgImage else { return }
+        // options return empty dictionary
+        let handler = VNImageRequestHandler(cgImage: cgImage, options: [:])
+        
+        do {
+            // Array of requests
+            try handler.perform([request])
+            
+        } catch let error {
+            print("Failed to perform request",error)
+        }
+        
     }
     
-
 
 }
 
