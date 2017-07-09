@@ -17,9 +17,9 @@ class ViewController: UIViewController {
         let imageView = UIImageView(image: image)
         imageView.contentMode = .scaleAspectFit
         
-        let scaledHeight = image.size.width
+        let scaledHeight = view.frame.width / image.size.width * image.size.height
         
-        imageView.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 200)
+        imageView.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: scaledHeight)
         imageView.backgroundColor = .blue
         
         view.addSubview(imageView)
