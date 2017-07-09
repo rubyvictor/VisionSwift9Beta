@@ -14,7 +14,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        guard let image = UIImage(named: "Sample1") else { return }
+        guard let image = UIImage(named: "sample3") else { return }
         let imageView = UIImageView(image: image)
         imageView.contentMode = .scaleAspectFit
         
@@ -39,6 +39,24 @@ class ViewController: UIViewController {
                 // Cast results as VNFaceObservation and call its functions
                 
                 guard let vnFaceObservation = result as? VNFaceObservation else { return }
+                
+                // Use faceObservation's boundingBox values  to get x y origin coordinates to place faceView.  Remember origin starts from lower left.
+                let x = self.view.frame.width * vnFaceObservation.boundingBox.origin.x
+                let width = self.view.frame.width * vnFaceObservation.boundingBox.width
+                let height = scaledHeight * vnFaceObservation.boundingBox.height
+                
+                // 2 steps to getting correct y coordinate. First, 1 minus the origin.y. Second, subtract the height
+                
+                let y = scaledHeight * (1 - vnFaceObservation.boundingBox.origin.y) - height
+                
+                // Make box to place on face
+                let faceView = UIView()
+                faceView.backgroundColor = .yellow
+                faceView.alpha = 0.4
+                faceView.frame = CGRect(x: x, y: y, width: width, height: height)
+                self.view.addSubview(faceView)
+                
+                
                 
                 print(vnFaceObservation.boundingBox)
                 
